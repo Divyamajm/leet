@@ -17,7 +17,7 @@ class Solution {
     }
     public int change(int amount, int[] coins) {
         int n=coins.length;
-        int[][] dp=new int[n][2*amount+1];
+        int[][] dp=new int[n][amount+1];
         for(int[] row:dp){
             Arrays.fill(row,-1);
         }
