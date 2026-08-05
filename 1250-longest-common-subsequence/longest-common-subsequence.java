@@ -20,12 +20,6 @@ class Solution {
         // for(int[] row:dp){
         //     Arrays.fill(row,-1);
         // }
-        for(int i=0;i<n;i++){
-            dp[n][0]=0;
-        }
-        for(int i=0;i<m;i++){
-            dp[0][i]=0;
-        }
         for(int ind1=1;ind1<=n;ind1++){
             for(int ind2=1;ind2<=m;ind2++){
                 if(text1.charAt(ind1-1)==text2.charAt(ind2-1)){
