@@ -21,8 +21,13 @@ class Solution {
             dp[ind1][ind2]=helper(ind1-1,ind2-1,s,p,dp);
             return dp[ind1][ind2];
         }
-        if(p.charAt(ind2-1)=='*'){
-            dp[ind1][ind2]=helper(ind1-1,ind2,s,p,dp)+helper(ind1,ind2-1,s,p,dp);
+        if (p.charAt(ind2 - 1) == '*') {
+            // FIXED: Using || to short-circuit, preventing TLE and keeping values at 1 or 0
+            if (helper(ind1 - 1, ind2, s, p, dp) == 1 || helper(ind1, ind2 - 1, s, p, dp) == 1) {
+                dp[ind1][ind2] = 1;
+            } else {
+                dp[ind1][ind2] = 0;
+            }
             return dp[ind1][ind2];
         }
         if(s.charAt(ind1-1)!=p.charAt(ind2-1)){
