@@ -1,51 +1,48 @@
 class Solution {
-    private int helper(int ind1,int ind2,String s,String p,int[][] dp){
-        if(ind1==0&&ind2==0){
-            return 1;
+    public boolean isMatch(String s, String p) {
+        int n = s.length();
+        int m = p.length();
+        int[][] dp = new int[n + 1][m + 1];
+        
+        dp[0][0] = 1;
+        
+        for (int i = 1; i <= n; i++) {
+            dp[i][0] = 0;
         }
-        if(ind2==0&&ind1!=0){
-            return 0;
-        }
-        if(ind1==0){
-            for(int i=0;i<ind2;i++){
-                if(p.charAt(i)!='*'){
-                    return 0;
+        
+        // FIXED: Loop must iterate up to 'm' (pattern length) and update row 0 (dp[0][ind2])
+        for (int ind2 = 1; ind2 <= m; ind2++) {
+            int flag = 1;
+            for (int i = 1; i <= ind2; i++) {
+                if (p.charAt(i - 1) != '*') {
+                    flag = 0;
+                    break;
                 }
             }
-            return 1;
+            dp[0][ind2] = flag;
         }
-        if(dp[ind1][ind2]!=-1){
-            return dp[ind1][ind2];
-        }
-        if(s.charAt(ind1-1)==p.charAt(ind2-1)||p.charAt(ind2-1)=='?'){
-            dp[ind1][ind2]=helper(ind1-1,ind2-1,s,p,dp);
-            return dp[ind1][ind2];
-        }
-        if (p.charAt(ind2 - 1) == '*') {
-            // FIXED: Using || to short-circuit, preventing TLE and keeping values at 1 or 0
-            if (helper(ind1 - 1, ind2, s, p, dp) == 1 || helper(ind1, ind2 - 1, s, p, dp) == 1) {
-                dp[ind1][ind2] = 1;
-            } else {
-                dp[ind1][ind2] = 0;
+        
+        for (int ind1 = 1; ind1 <= n; ind1++) {
+            for (int ind2 = 1; ind2 <= m; ind2++) {
+                
+                if (s.charAt(ind1 - 1) == p.charAt(ind2 - 1) || p.charAt(ind2 - 1) == '?') {
+                    dp[ind1][ind2] = dp[ind1 - 1][ind2 - 1];
+                }
+                // FIXED: Must use 'else if' to prevent overwriting
+                else if (p.charAt(ind2 - 1) == '*') { 
+                    if (dp[ind1 - 1][ind2] == 1 || dp[ind1][ind2 - 1] == 1) {
+                        dp[ind1][ind2] = 1;
+                    } else {
+                        dp[ind1][ind2] = 0;
+                    }
+                }
+                // FIXED: Must use 'else' to prevent overwriting
+                else { 
+                    dp[ind1][ind2] = 0;
+                }
             }
-            return dp[ind1][ind2];
         }
-        if(s.charAt(ind1-1)!=p.charAt(ind2-1)){
-            return 0;
-        }
-        return 1;
-    }
-    public boolean isMatch(String s, String p) {
-        int n=s.length();
-        int m=p.length();
-        int[][] dp=new int[n+1][m+1];
-        for(int[] row:dp){
-            Arrays.fill(row,-1);
-        }
-        int x=helper(n,m,s,p,dp);
-        if(x==0){
-            return false;
-        }
-        return true;
+        
+        return dp[n][m] == 1;
     }
 }
