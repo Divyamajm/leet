@@ -23,28 +23,31 @@ class Solution {
         int n=word1.length();
         int m=word2.length();
         int[][] dp=new int[n+1][m+1];
+        int[] prev=new int[m+1];
+        int[] temp=new int[m+1];
         // for(int[]row: dp){
         //     Arrays.fill(row,-1);
         // }
-        for(int i=0;i<=n;i++){
-            dp[i][0]=i;
+        for(int i=0;i<=m;i++){
+            prev[i]=i;
         }
-        for(int i=1;i<=m;i++){
-            dp[0][i]=i;
-        }
+        // for(int i=1;i<=m;i++){
+        //     prev[i]=i;
+        // }
         for(int ind1=1;ind1<=n;ind1++){
+            temp[0]=ind1;
             for(int ind2=1;ind2<=m;ind2++){
                 if(word1.charAt(ind1-1)==word2.charAt(ind2-1)){
                     // return 
-                    dp[ind1][ind2]=dp[ind1-1][ind2-1];
+                    temp[ind2]=prev[ind2-1];
                     // return dp[ind1][ind2];
                 }
                 else{
-                    dp[ind1][ind2]=1+Math.min(dp[ind1-1][ind2],Math.min(dp[ind1][ind2-1],dp[ind1-1][ind2-1]));
+                    temp[ind2]=1+Math.min(prev[ind2],Math.min(temp[ind2-1],prev[ind2-1]));
                     // return dp[ind1][ind2];
                 }
-            }
+            }prev=temp.clone();
         }
-        return dp[n][m];
+        return prev[m];
     }
 }
