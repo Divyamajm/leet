@@ -10,39 +10,40 @@ class Solution {
             dp[i][0] = 0;
         }
         
-        // FIXED: Loop must iterate up to 'm' (pattern length) and update row 0 (dp[0][ind2])
-        for (int ind2 = 1; ind2 <= m; ind2++) {
+        // FIXED BASE CASE
+        for (int j = 1; j <= m; j++) {
             int flag = 1;
-            for (int i = 1; i <= ind2; i++) {
+            for (int i = 1; i <= j; i++) {
                 if (p.charAt(i - 1) != '*') {
                     flag = 0;
-                    break;
+                    break; 
                 }
             }
-            dp[0][ind2] = flag;
+            dp[0][j] = flag;
         }
         
         for (int ind1 = 1; ind1 <= n; ind1++) {
             for (int ind2 = 1; ind2 <= m; ind2++) {
-                
                 if (s.charAt(ind1 - 1) == p.charAt(ind2 - 1) || p.charAt(ind2 - 1) == '?') {
                     dp[ind1][ind2] = dp[ind1 - 1][ind2 - 1];
-                }
-                // FIXED: Must use 'else if' to prevent overwriting
-                else if (p.charAt(ind2 - 1) == '*') { 
+                } 
+                else if (p.charAt(ind2 - 1) == '*') {
                     if (dp[ind1 - 1][ind2] == 1 || dp[ind1][ind2 - 1] == 1) {
                         dp[ind1][ind2] = 1;
                     } else {
                         dp[ind1][ind2] = 0;
                     }
-                }
-                // FIXED: Must use 'else' to prevent overwriting
-                else { 
+                } 
+                else {
                     dp[ind1][ind2] = 0;
                 }
             }
         }
         
-        return dp[n][m] == 1;
+        int x = dp[n][m];
+        if (x == 0) {
+            return false;
+        }
+        return true;
     }
 }
