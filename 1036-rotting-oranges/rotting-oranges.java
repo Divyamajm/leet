@@ -12,46 +12,46 @@ class Solution {
     public int orangesRotting(int[][] grid) {
         int n=grid.length;
         int m=grid[0].length;
-        int count=0;
         int[][] visited=new int[n][m];
-        Queue<Pair>q=new LinkedList<>();
+        int count=0;
+        Queue<Pair> q=new LinkedList<>();
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
                 if(grid[i][j]==2){
-                    visited[i][j]=1;
                     q.add(new Pair(i,j,0));
-                }
-                else if(grid[i][j]==0){
-                    visited[i][j]=0;
+                    visited[i][j]=1;
                 }
                 else{
+                    visited[i][j]=0;
+                }
+                if(grid[i][j]==1){
                     count++;
                 }
             }
         }
-        int cnt=0;
-        int t=0;
         int[] delRow={-1,0,1,0};
-        int[] delCol={0,-1,0,1};
+        int[] delCol={0,1,0,-1};
+        int cnt=0;
+        int time=0;
         while(!q.isEmpty()){
-            int row=q.peek().first;
-            int col=q.peek().second;
-            int time=q.peek().third;
+            int r=q.peek().first;
+            int c=q.peek().second;
+            int t=q.peek().third;
             q.poll();
-            t=Math.max(time,t);
+            time=Math.max(time,t);
             for(int i=0;i<4;i++){
-                int nRow=row+delRow[i];
-                int nCol=col+delCol[i];
-                if(nRow>=0&&nRow<n&&nCol>=0&&nCol<m&&grid[nRow][nCol]==1&&visited[nRow][nCol]!=1){
-                    q.add(new Pair(nRow,nCol,time+1));
-                    visited[nRow][nCol]=1;
+                int nrow=r+delRow[i];
+                int ncol=c+delCol[i];
+                if(nrow>=0&&nrow<n&&ncol>=0&&ncol<m&&visited[nrow][ncol]==0&&grid[nrow][ncol]==1){
+                    q.add(new Pair(nrow,ncol,t+1));
+                    visited[nrow][ncol]=2;
                     cnt++;
                 }
             }
         }
-        if(cnt!=count){
+        if(count!=cnt){
             return -1;
         }
-        return t;
+        return time;
     }
 }
