@@ -1,58 +1,34 @@
-import java.util.HashMap;
-import java.util.PriorityQueue;
-import java.util.Collections;
-import java.util.ArrayList;
-import java.util.List;
-
 class Solution {
     public int leastInterval(char[] tasks, int n) {
-        HashMap<Character, Integer> map = new HashMap<>();
-        for (char c : tasks) {
-            map.put(c, map.getOrDefault(c, 0) + 1);
+        HashMap<Character,Integer>map=new HashMap<>();
+        PriorityQueue<Integer>q=new PriorityQueue<>(Collections.reverseOrder());
+        for(int i=0;i<tasks.length;i++){
+            map.put(tasks[i],map.getOrDefault(tasks[i],0)+1);
         }
-        
-        PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
-        maxHeap.addAll(map.values());
-        
-        int totalTime = 0;
-        
-        // Simpler Engine: Process in blocks of (n + 1)
-        while (!maxHeap.isEmpty()) {
-            
-            List<Integer> waitingRoom = new ArrayList<>();
-            int cycleLength = n + 1;
-            int tasksDoneThisCycle = 0;
-            
-            // 1. Pull as many unique tasks as possible for this cycle
-            while (cycleLength > 0 && !maxHeap.isEmpty()) {
-                int freq = maxHeap.poll();
-                freq--;
-                
-                if (freq > 0) {
-                    waitingRoom.add(freq);
+        q.addAll(map.values());
+        int task=0;
+        while(!q.isEmpty()){
+            ArrayList<Integer>temp=new ArrayList<>();
+            int cycleLength=n+1;
+            int tasksDone=0;
+            while(!q.isEmpty()&&cycleLength>0){
+                int x=q.poll();
+                x--;
+                if(x>0){
+                    temp.add(x);
                 }
-                
-                tasksDoneThisCycle++;
                 cycleLength--;
+                tasksDone++;
             }
-            
-            // 2. Dump everything from the waiting room back into the heap
-            for (int freq : waitingRoom) {
-                maxHeap.offer(freq);
+            for(int f:temp){
+                q.offer(f);
             }
-            
-            // 3. Add time
-            if (maxHeap.isEmpty()) {
-                // The heap is empty! We are completely done. 
-                // Only add the tasks we actually did, no trailing idle time.
-                totalTime += tasksDoneThisCycle; 
-            } else {
-                // There are still tasks left, which means the whole (n + 1) block passed
-                // (including any idle time if we ran out of unique tasks this cycle).
-                totalTime += (n + 1); 
+            if(q.isEmpty()){
+                task+=tasksDone;
             }
-        }
-        
-        return totalTime;
+            else{
+                task+=n+1;
+            }
+        }return task;
     }
 }
