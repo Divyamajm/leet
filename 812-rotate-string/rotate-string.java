@@ -27,7 +27,7 @@ class Solution {
         for(int i = 0; i < n; i++) {
             
             // The Triple Reversal formula to shift left by 1
-            reverse(0, 0, s2);          // Reverse the first chunk (size 1)
+            // reverse(0, 0, s2);          // Reverse the first chunk (size 1)
             reverse(1, n - 1, s2);      // Reverse the remaining chunk
             reverse(0, n - 1, s2);      // Reverse the whole array
             
