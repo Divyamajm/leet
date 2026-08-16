@@ -14,6 +14,6 @@ class Solution {
         // if(total>Integer.MAX_VALUE){
         //     return false;
         // }
-        return (int)(total*found)==y;
+        return (int)(total)==y;
     }
 }
