@@ -9,7 +9,7 @@ class Solution {
         while(r<=n){
             map.put(s.charAt(r),map.getOrDefault(s.charAt(r),0)+1);
             maxCount=Math.max(maxCount,map.get(s.charAt(r)));
-            if(r-l+1-maxCount>k){
+            while(r-l+1-maxCount>k){
                 map.put(s.charAt(l),map.get(s.charAt(l))-1);
                 l++;
             }
