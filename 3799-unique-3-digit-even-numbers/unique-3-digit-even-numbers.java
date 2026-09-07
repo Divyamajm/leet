@@ -1,36 +1,30 @@
+import java.util.HashSet;
+
 class Solution {
     public int totalNumbers(int[] digits) {
-        // 1. Build our frequency map for the input array
-        int[] freq = new int[10];
-        for (int digit : digits) {
-            freq[digit]++;
-        }
+        // HashSet automatically ignores duplicates
+        HashSet<Integer> set = new HashSet<>();
+        int n = digits.length;
         
-        int count = 0;
-        
-        // 2. Just check every possible 3-digit even number (100, 102, 104 ... 998)
-        for (int i = 100; i <= 998; i += 2) {
-            // Count what digits are required to build the current number 'i'
-            int[] requiredFreq = new int[10];
-            requiredFreq[i % 10]++;         // Ones place
-            requiredFreq[(i / 10) % 10]++;  // Tens place
-            requiredFreq[i / 100]++;        // Hundreds place
-            
-            // 3. Check if our input array has enough of each required digit
-            boolean canBuild = true;
-            for (int j = 0; j < 10; j++) {
-                if (requiredFreq[j] > freq[j]) {
-                    canBuild = false;
-                    break;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                for (int k = 0; k < n; k++) {
+                    // 1. Ensure we are picking 3 distinct indices from the array
+                    if (i == j || j == k || i == k) continue;
+                    
+                    // 2. Prevent leading zeros in the hundreds place
+                    if (digits[i] == 0) continue;
+                    
+                    // 3. Ensure the ones place is an even number
+                    if (digits[k] % 2 != 0) continue;
+                    
+                    // Construct the number and drop it into the set
+                    int num = digits[i] * 100 + digits[j] * 10 + digits[k];
+                    set.add(num);
                 }
             }
-            
-            // If we have the parts, it's a valid number!
-            if (canBuild) {
-                count++;
-            }
         }
         
-        return count;
+        return set.size();
     }
 }
