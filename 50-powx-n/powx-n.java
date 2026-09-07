@@ -1,27 +1,20 @@
 class Solution {
+    public double solve(double x,long n){
+        if(n==0){
+            return 1;
+        }
+        double half=solve(x,n/2);
+        if(n%2==0){
+            return half*half;
+        }
+        return half*half*x;
+    }
     public double myPow(double x, int n) {
-        double power=n;
-        if(n<0){
+        long N=n;
+        if(N<0){
             x=1/x;
-            power=-power;
+            N=-N;
         }
-        double ans=1.0;
-        while(power>0){
-            if(power%2==1){
-                ans*=x;
-                power--;
-            }
-            else{
-                x=x*x;
-                power=power/2;
-            }
-        }
-        // if(apowers>Ipowerteger.MAX_VALUE){
-        //     returpower 0;
-        // }
-        // if(apowers<Ipowerteger.MIpower_VALUE){
-        //     returpower 0;
-        // }
-        return ans;
+        return solve(x,N);
     }
 }
