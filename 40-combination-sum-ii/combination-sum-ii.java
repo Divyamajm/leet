@@ -1,9 +1,11 @@
 class Solution {
     private void helper(int index,int[] candidates,int target,Set<List<Integer>> result,List<Integer> current){
+        if(target==0){
+            result.add(new ArrayList<>(current));
+            return;
+        }
         if(candidates.length==index){
-            if(target==0){
-                result.add(new ArrayList<>(current));
-            }return;
+            return;
         }
         if(candidates[index]<=target){
             current.add(candidates[index]);
