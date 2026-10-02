@@ -1,62 +1,37 @@
 class Solution {
     public int myAtoi(String s) {
-        StringBuilder sb=new StringBuilder();
-        int sign =1;
-        int found=0;
-        int found1=0;
-        // s.trim("\\s+");
-        // if(s.charAt(0)=='-'){
-        //     sign =-1;
-        // }
-        for(int i=0;i<s.length();i++){
-            char c=s.charAt(i);
-            if(Character.isDigit(c)){
-                if(c=='0'&&found==0){
-                    found1=1;
-                    continue;
-                }
-                else if(Character.isDigit(c)){
-                    found1=1;
-                    found=1;
-                    sb.append(c);
-                }
-            }
-            else if(found==0&&c=='+'&&found1==0){
-                found1=1;
-                continue;
-            }
-            else if(found==0&&c==' '&&found1==0){
-                continue;
-            }
-            else if(found==0&&c=='-'&&found1==0){
-                found1=1;
-                sign=-1;
-                continue;
-            }
-            else{
-                break;
-            }
-        }
-        if(sb.length()==0){
-            return 0;
-        }
-        String sb1=sb.toString();
-        System.out.println(sb1);
-        long x=0;
-        if (sb1.length() > 10) {
-            return sign == 1 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
-        }
-        for(int i=0;i<sb1.length();i++){
-            int digit=sb1.charAt(i)-'0';
-            x=x*10+digit;
-        }
-        x=x*sign;
-        // long x = Long.parseLong(sb1.toString()) * sign;
+        // Step 1: Clean the string and check if it's empty
+        s = s.trim();
+        if (s.length() == 0) return 0;
         
-        // // Clamp to 32-bit integer limits
-        if (x > Integer.MAX_VALUE) return Integer.MAX_VALUE;
-        if (x < Integer.MIN_VALUE) return Integer.MIN_VALUE;
-        return (int)x;
-        // return (int) x;
+        int sign = 1;
+        int r = 0;
+        int total = 0;
+        
+        // Step 2: Check for a sign EXACTLY ONCE
+        if (s.charAt(r) == '-' || s.charAt(r) == '+') {
+            if (s.charAt(r) == '-') sign = -1;
+            r++; // move past the sign
+        }
+        
+        // Step 3: Now just do the math! (No need to skip zeros manually)
+        while (r < s.length()) {
+            int digit = s.charAt(r) - '0';
+            
+            // If it's not a number, stop entirely
+            if (digit < 0 || digit > 9) break;
+            
+            // Catch overflow BEFORE we multiply by 10
+            if (total > Integer.MAX_VALUE / 10 || (total == Integer.MAX_VALUE / 10 && digit > 7)) {
+                return sign == 1 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+            }
+            
+            // Mathematically, total * 10 + 0 handles zeros perfectly!
+            // E.g., if total is 5, and we see a '0', total becomes 50.
+            total = total * 10 + digit;
+            r++;
+        }
+        
+        return sign * total;
     }
 }
