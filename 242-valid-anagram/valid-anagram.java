@@ -3,9 +3,9 @@ class Solution {
         if(s.length()!=t.length()){
             return false;
         }
+        int n=s.length();
         int[] array=new int[26];
         Arrays.fill(array,0);
-        int n=s.length();
         for(int i=0;i<n;i++){
             array[s.charAt(i)-'a']++;
             array[t.charAt(i)-'a']--;
@@ -14,6 +14,7 @@ class Solution {
             if(array[i]!=0){
                 return false;
             }
-        }return true;
+        }
+        return true;
     }
 }
