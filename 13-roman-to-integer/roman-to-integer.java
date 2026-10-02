@@ -1,38 +1,37 @@
 class Solution {
-    public int value(char c){
-        if(c=='I'){
-            return 1;
+    // 1. Using a switch statement is cleaner and slightly faster
+    public int value(char c) {
+        switch (c) {
+            case 'I': return 1;
+            case 'V': return 5;
+            case 'X': return 10;
+            case 'L': return 50;
+            case 'C': return 100;
+            case 'D': return 500;
+            case 'M': return 1000;
+            default: return 0;
         }
-        else if(c=='V'){
-            return 5;
-        }
-        else if(c=='X'){
-            return 10;
-        }
-        else if(c=='L'){
-            return 50;
-        }
-        else if(c=='C'){
-            return 100;
-        }
-        else if(c=='D'){
-            return 500;
-        }
-        else{
-            return 1000;
-        }
-        // return 0;
     }
+    
     public int romanToInt(String s) {
-        int total=value(s.charAt(s.length()-1));
-        for(int i=s.length()-2;i>=0;i--){
-            if(value(s.charAt(i))<value(s.charAt(i+1))){
-                total=total-value(s.charAt(i));
+        int total = 0;
+        int prevValue = 0; // Keep track of the last number we looked at
+        
+        // Loop from right to left
+        for (int i = s.length() - 1; i >= 0; i--) {
+            int currentValue = value(s.charAt(i));
+            
+            // 2. Compare with prevValue instead of looking ahead in the string
+            if (currentValue < prevValue) {
+                total -= currentValue;
+            } else {
+                total += currentValue;
             }
-            else{
-                total=total+value(s.charAt(i));
-            }
+            
+            // Update prevValue for the next iteration
+            prevValue = currentValue;
         }
+        
         return total;
     }
 }
