@@ -5,10 +5,12 @@ class Solution {
         int total=0;
         int n=s.length();
         for(int i=0;i<n;i++){
-            array[s.charAt(i)-'a']++;
+            int rchar=s.charAt(i)-'a';
+            array[rchar]++;
             while(array[0]!=0&&array[1]!=0&&array[2]!=0){
                 total+=n-i;
-                array[s.charAt(l)-'a']--;
+                int lchar=s.charAt(l)-'a';
+                array[lchar]--;
                 l++;
             }
         }
