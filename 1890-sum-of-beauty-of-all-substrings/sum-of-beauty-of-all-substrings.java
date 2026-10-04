@@ -1,23 +1,23 @@
 class Solution {
     public int beautySum(String s) {
         int total=0;
-        for(int i=0;i<s.length();i++){
-            HashMap<Character,Integer>map=new HashMap<>();
-            // total=0;
-            for(int j=i;j<s.length();j++){
-                map.put(s.charAt(j),map.getOrDefault(s.charAt(j),0)+1);
-                int max=0;
+        int n=s.length();
+        for(int i=0;i<n;i++){
+            HashMap<Character,Integer>map=new HashMap();
+            for(int j=i;j<n;j++){
+                char c=s.charAt(j);
+                map.put(c,map.getOrDefault(c,0)+1);
                 int min=Integer.MAX_VALUE;
-                for(int count:map.values()){
-                    if(count>0){
-                        max=Math.max(max,count);
-                        min=Math.min(min,count);
+                int max=0;
+                for(int x:map.values()){
+                    max=Math.max(max,x);
+                    if(x>0){
+                        min=Math.min(min,x);
                     }
-                    // System.out.print(max,min);
                 }
-
                 total+=max-min;
             }
-        }return total;
+        }
+        return total;
     }
 }
