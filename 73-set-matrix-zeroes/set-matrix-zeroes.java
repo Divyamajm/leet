@@ -1,37 +1,37 @@
 class Solution {
-    private void row(int row,int[][] matrix){
-        int m=matrix[0].length;
-        for(int i=0;i<m;i++){
-            matrix[row][i]=0;
-        }
-    }
-    private void col(int col,int[][] matrix){
-        int n=matrix.length;
-        for(int i=0;i<n;i++){
-            matrix[i][col]=0;
-        }
-    }
     public void setZeroes(int[][] matrix) {
         int n=matrix.length;
         int m=matrix[0].length;
-        int[] row=new int[n];
-        int[] col=new int[m];
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
                 if(matrix[i][j]==0){
-                    row[i]=-1;
-                    col[j]=-1;
+                    matrix[i][j]=Integer.MIN_VALUE+28;
                 }
             }
         }
         for(int i=0;i<n;i++){
-            if(row[i]==-1){
-                row(i,matrix);
+            for(int j=0;j<m;j++){
+                if(matrix[i][j]==Integer.MIN_VALUE+28){
+                    for(int k=0;k<m;k++){
+                        if(matrix[i][k]!=Integer.MIN_VALUE+28){
+                            matrix[i][k]=0;
+                        }
+                    }
+                    // Arrays.fill(matrix[i],0);
+                    for(int k=0;k<n;k++){
+                        if(matrix[k][j]!=Integer.MIN_VALUE+28){
+                            matrix[k][j]=0;
+                        }
+                    }
+                    matrix[i][j]=Integer.MIN_VALUE+28;
+                }
             }
         }
-        for(int i=0;i<m;i++){
-            if(col[i]==-1){
-                col(i,matrix);
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(matrix[i][j]==Integer.MIN_VALUE+28){
+                    matrix[i][j]=0;
+                }
             }
         }
     }
