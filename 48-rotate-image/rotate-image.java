@@ -1,7 +1,7 @@
 class Solution {
-    private void reverse(int row,int[][] matrix){
+    public void reverse(int row,int[][] matrix){
         int start=0;
-        int end=matrix.length-1;
+        int end=matrix[0].length-1;
         while(start<=end){
             int temp=matrix[row][start];
             matrix[row][start]=matrix[row][end];
