@@ -1,29 +1,16 @@
 class Solution {
     public void merge(int[] nums1, int m, int[] nums2, int n) {
-        // Pointers for nums1, nums2, and the end of the merged array
-        int p1 = m - 1;
-        int p2 = n - 1;
-        int p = m + n - 1;
-        
-        // While there are still elements to compare in both arrays
-        while (p1 >= 0 && p2 >= 0) {
-            // Pick the LARGEST element and put it at the back
-            if (nums1[p1] > nums2[p2]) {
-                nums1[p] = nums1[p1];
-                p1--;
-            } else {
-                nums1[p] = nums2[p2];
-                p2--;
-            }
-            p--; // Move the insertion pointer backwards
+        int[] final1=new int[m+nums2.length];
+        int i;
+        for(i=0;i<m;i++){
+            final1[i]=nums1[i];
         }
-        
-        // If there are leftover elements in nums2, copy them over.
-        // (If there are leftover elements in nums1, they are already in the right place!)
-        while (p2 >= 0) {
-            nums1[p] = nums2[p2];
-            p2--;
-            p--;
+        for(i=m;i<m+nums2.length;i++){
+            final1[i]=nums2[i-m];
+        }
+        Arrays.sort(final1);
+        for(int j=0;j<m+nums2.length;j++){
+            nums1[j]=final1[j];
         }
     }
 }
