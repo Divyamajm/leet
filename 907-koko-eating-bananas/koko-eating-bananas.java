@@ -13,7 +13,7 @@ class Solution {
         for(int i=0;i<n;i++){
             max=Math.max(max,piles[i]);
         }
-        int l=0;
+        int l=1;
         int ans=-1;
         int r=max;
         while(l<=r){
