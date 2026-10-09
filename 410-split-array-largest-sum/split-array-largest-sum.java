@@ -1,38 +1,35 @@
 class Solution {
-    private int helper(int mid,int[]nums){
-        int count=1;
-        int total=nums[0];
-        for(int i=1;i<nums.length;i++){
-            total+=nums[i];
-            if(total>mid){
-                total=nums[i];
-                count++;
+    // true if nums can be split into <= k subarrays, each sum <= mid
+    private boolean canSplit(int[] nums, int k, int mid) {
+        int pieces = 1;
+        int total = 0;
+        for (int num : nums) {
+            if (total + num > mid) {
+                pieces++;
+                total = num;
+            } else {
+                total += num;
             }
-        }return count;
+        }
+        return pieces <= k;
     }
+
     public int splitArray(int[] nums, int k) {
-        if(k>nums.length){
-            return -1;
+        int l = 0, r = 0;
+        for (int num : nums) {
+            l = Math.max(l, num);   // lower bound: largest element
+            r += num;               // upper bound: total sum
         }
-        int total=0;
-        int max=Integer.MIN_VALUE;
-        for(int i=0;i<nums.length;i++){
-            total+=nums[i];
-            max=Math.max(max,nums[i]);
+        int ans = r;
+        while (l <= r) {
+            int mid = l + (r - l) / 2;
+            if (canSplit(nums, k, mid)) {
+                ans = mid;
+                r = mid - 1;        // feasible: try smaller
+            } else {
+                l = mid + 1;        // infeasible: need larger
+            }
         }
-        int l=max;
-        int r=total;
-        int ans=-1;
-        while(l<=r){
-            int mid=l+(r-l)/2;
-            int x=helper(mid,nums);
-            if(x<=k){
-                r=mid-1;
-                ans=mid;
-            }
-            else{
-                l=mid+1;
-            }
-        }return ans;
+        return ans;
     }
 }
