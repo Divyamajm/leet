@@ -5,18 +5,21 @@ class Solution {
         for(int i=0;i<n;i++){
             int l=0;
             int r=m-1;
-            while(l<=r){
-                int mid=l+(r-l)/2;
-                if(matrix[i][mid]==target){
-                    return true;
-                }
-                else if(matrix[i][mid]>target){
-                    r=mid-1;
-                }
-                else{
-                    l=mid+1;
+            if(target<=matrix[i][r]&&target>=matrix[i][l]){
+                while(l<=r){
+                    int mid=l+(r-l)/2;
+                    if(target==matrix[i][mid]){
+                        return true;
+                    }
+                    else if(target<matrix[i][mid]){
+                        r=mid-1;
+                    }
+                    else{
+                        l=mid+1;
+                    }
                 }
             }
-        }return false;
+        }
+        return false;
     }
 }
