@@ -1,33 +1,41 @@
-class Solution {
-    // This tracks the node immediately after the 'right' index
-    // so we can reconnect it to the tail of our reversed sublist.
-    ListNode successor = null; 
+import java.util.Stack;
 
-    // Helper function to reverse the first 'n' nodes
-    private ListNode reverseFirstN(ListNode head, int n) {
-        if (n == 1) {
-            // Record the node that comes AFTER our reversed sublist
-            successor = head.next;
+class Solution {
+    public ListNode reverseBetween(ListNode head, int left, int right) {
+        if (head == null || left == right) {
             return head;
         }
-        
-        ListNode last = reverseFirstN(head.next, n - 1);
-        head.next.next = head;
-        // Connect the reversed part to the un-reversed rest of the list
-        head.next = successor; 
-        
-        return last;
-    }
 
-    public ListNode reverseBetween(ListNode head, int left, int right) {
-        // Base case: If we've reached the start of the sublist, reverse the next (right) nodes
-        if (left == 1) {
-            return reverseFirstN(head, right);
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        
+        // 1. Traverse to the node immediately before the 'left' index
+        ListNode prev = dummy;
+        for (int i = 0; i < left - 1; i++) {
+            prev = prev.next;
         }
-        
-        // Move forward until we hit the 'left' index
-        head.next = reverseBetween(head.next, left - 1, right - 1);
-        
-        return head;
+
+        // 2. Push all nodes from 'left' to 'right' onto the stack
+        ListNode curr = prev.next;
+        Stack<ListNode> stack = new Stack<>();
+        for (int i = 0; i <= right - left; i++) {
+            stack.push(curr);
+            curr = curr.next;
+        }
+
+        // 'curr' is now sitting on the node immediately AFTER 'right' (the successor)
+        ListNode successor = curr; 
+
+        // 3. Pop nodes off the stack and re-link them. 
+        // Because it's a stack, they come out in reverse order!
+        while (!stack.isEmpty()) {
+            prev.next = stack.pop();
+            prev = prev.next; // Move our pointer forward
+        }
+
+        // 4. Connect the tail of our newly reversed sublist to the rest of the list
+        prev.next = successor;
+
+        return dummy.next;
     }
 }
