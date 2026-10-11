@@ -2,73 +2,78 @@ class MyLinkedList {
     class Node {
         int val;
         Node next;
+        Node prev;
         public Node(int val) {
             this.val = val;
         }
     }
 
-    private Node head;
-    private int size; // Tracking size makes edge cases much easier
+    private int size;
+    private Node head; // Dummy head
+    private Node tail; // Dummy tail
 
     public MyLinkedList() {
-        head = null;
         size = 0;
+        head = new Node(0);
+        tail = new Node(0);
+        // Connect the dummy head and tail to each other
+        head.next = tail;
+        tail.prev = head;
     }
     
     public int get(int index) {
-        // Return -1 if index is invalid
         if (index < 0 || index >= size) {
             return -1;
         }
         
-        Node temp = head;
-        for (int i = 0; i < index; i++) {
-            temp = temp.next;
+        // Optimize: choose the fastest path (from head or from tail)
+        Node curr = head;
+        if (index + 1 < size - index) {
+            for (int i = 0; i <= index; i++) {
+                curr = curr.next;
+            }
+        } else {
+            curr = tail;
+            for (int i = 0; i < size - index; i++) {
+                curr = curr.prev;
+            }
         }
-        return temp.val;
+        return curr.val;
     }
     
     public void addAtHead(int val) {
-        Node newNode = new Node(val);
-        newNode.next = head;
-        head = newNode;
-        size++;
+        addAtIndex(0, val);
     }
     
     public void addAtTail(int val) {
-        if (head == null) {
-            addAtHead(val);
-            return;
-        }
-        
-        Node temp = head;
-        while (temp.next != null) {
-            temp = temp.next;
-        }
-        temp.next = new Node(val);
-        size++;
+        addAtIndex(size, val);
     }
     
     public void addAtIndex(int index, int val) {
-        // If index is greater than the length, the node will not be inserted.
+        // If index is greater than the length, do not insert
         if (index > size) {
             return;
         }
-        // If index is negative or 0, insert at head
-        if (index <= 0) {
-            addAtHead(val);
-            return;
+        // If index is negative, insert at head
+        if (index < 0) {
+            index = 0;
         }
         
-        Node temp = head;
-        // Stop exactly one node BEFORE the insertion point
-        for (int i = 0; i < index - 1; i++) {
-            temp = temp.next;
+        // Find predecessor and successor of the new node
+        Node pred = head;
+        for (int i = 0; i < index; i++) {
+            pred = pred.next;
         }
+        Node succ = pred.next;
         
+        // Wire in the new node
         Node newNode = new Node(val);
-        newNode.next = temp.next; // Connect new node to the rest of the list
-        temp.next = newNode;      // Connect previous node to the new node
+        newNode.prev = pred;
+        newNode.next = succ;
+        
+        pred.next = newNode;
+        succ.prev = newNode;
+        
         size++;
     }
     
@@ -78,20 +83,19 @@ class MyLinkedList {
             return;
         }
         
-        if (index == 0) {
-            head = head.next;
-            size--;
-            return;
+        // Find predecessor of the node to be deleted
+        Node pred = head;
+        for (int i = 0; i < index; i++) {
+            pred = pred.next;
         }
         
-        Node temp = head;
-        // Stop exactly one node BEFORE the deletion point
-        for (int i = 0; i < index - 1; i++) {
-            temp = temp.next;
-        }
+        // Find successor
+        Node succ = pred.next.next;
         
-        // Skip the deleted node
-        temp.next = temp.next.next;
+        // Disconnect the deleted node
+        pred.next = succ;
+        succ.prev = pred;
+        
         size--;
     }
 }
