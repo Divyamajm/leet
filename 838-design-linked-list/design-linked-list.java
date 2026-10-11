@@ -1,89 +1,97 @@
 class MyLinkedList {
-    
     class Node {
         int val;
         Node next;
-        public Node(int val){
+        public Node(int val) {
             this.val = val;
         }
     }
-    
+
     private Node head;
+    private int size; // Tracking size makes edge cases much easier
 
     public MyLinkedList() {
         head = null;
+        size = 0;
     }
     
     public int get(int index) {
-        if (index < 0) return -1; // Handle negative index
-        
-        Node temp = head;
-        while(temp != null && index > 0){
-            temp = temp.next;
-            index--;
+        // Return -1 if index is invalid
+        if (index < 0 || index >= size) {
+            return -1;
         }
         
-        if (temp == null) return -1; // Handle out of bounds index
+        Node temp = head;
+        for (int i = 0; i < index; i++) {
+            temp = temp.next;
+        }
         return temp.val;
     }
     
     public void addAtHead(int val) {
-        Node node = new Node(val);
-        node.next = head;
-        head = node;
+        Node newNode = new Node(val);
+        newNode.next = head;
+        head = newNode;
+        size++;
     }
     
     public void addAtTail(int val) {
-        if (head == null) { // Handle empty list
+        if (head == null) {
             addAtHead(val);
             return;
         }
         
-        Node node = new Node(val);
         Node temp = head;
-        while(temp.next != null){
+        while (temp.next != null) {
             temp = temp.next;
         }
-        temp.next = node;
+        temp.next = new Node(val);
+        size++;
     }
     
     public void addAtIndex(int index, int val) {
-        if (index <= 0) { // Handle inserting at the beginning
+        // If index is greater than the length, the node will not be inserted.
+        if (index > size) {
+            return;
+        }
+        // If index is negative or 0, insert at head
+        if (index <= 0) {
             addAtHead(val);
             return;
         }
         
-        Node node = new Node(val);
         Node temp = head;
-        while(temp != null && index > 1){
+        // Stop exactly one node BEFORE the insertion point
+        for (int i = 0; i < index - 1; i++) {
             temp = temp.next;
-            index--;
         }
         
-        if (temp != null) { // Only link if index is valid
-            node.next = temp.next;
-            temp.next = node;
-        }
+        Node newNode = new Node(val);
+        newNode.next = temp.next; // Connect new node to the rest of the list
+        temp.next = newNode;      // Connect previous node to the new node
+        size++;
     }
     
     public void deleteAtIndex(int index) {
-        if (index < 0 || head == null) return; // Handle negative index or empty list
+        // If index is invalid, do nothing
+        if (index < 0 || index >= size) {
+            return;
+        }
         
-        if (index == 0) { // Handle deleting the head
+        if (index == 0) {
             head = head.next;
+            size--;
             return;
         }
         
         Node temp = head;
-        Node prev = null;
-        while(temp != null && index > 0){
-            prev = temp;
+        // Stop exactly one node BEFORE the deletion point
+        for (int i = 0; i < index - 1; i++) {
             temp = temp.next;
-            index--;
         }
         
-        if (temp != null && prev != null) { // Only delete if index is valid
-            prev.next = temp.next;
-        }
+        // Skip the deleted node
+        temp.next = temp.next.next;
+        size--;
     }
 }
