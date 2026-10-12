@@ -1,41 +1,43 @@
-import java.util.Stack;
-
 class Solution {
     public ListNode reverseBetween(ListNode head, int left, int right) {
+        // Edge case: No reversal needed
         if (head == null || left == right) {
             return head;
         }
 
+        // Dummy node handles the case where left = 1 (head changes)
         ListNode dummy = new ListNode(0);
         dummy.next = head;
         
-        // 1. Traverse to the node immediately before the 'left' index
-        ListNode prev = dummy;
-        for (int i = 0; i < left - 1; i++) {
-            prev = prev.next;
+        // Phase 1: Reach the node just BEFORE the reversal zone
+        ListNode beforeReverse = dummy;
+        for (int i = 1; i < left; i++) {
+            beforeReverse = beforeReverse.next;
         }
-
-        // 2. Push all nodes from 'left' to 'right' onto the stack
-        ListNode curr = prev.next;
-        Stack<ListNode> stack = new Stack<>();
+        
+        // The first node in our reversal zone will end up at the very back.
+        // We save it so we can connect it to the rest of the list later.
+        ListNode reverseTail = beforeReverse.next;
+        
+        // Phase 2: Standard Reversal Loop (but limited to right - left + 1 nodes)
+        ListNode prev = null;
+        ListNode curr = beforeReverse.next;
+        ListNode nxt = null;
+        
         for (int i = 0; i <= right - left; i++) {
-            stack.push(curr);
-            curr = curr.next;
+            nxt = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = nxt;
         }
-
-        // 'curr' is now sitting on the node immediately AFTER 'right' (the successor)
-        ListNode successor = curr; 
-
-        // 3. Pop nodes off the stack and re-link them. 
-        // Because it's a stack, they come out in reverse order!
-        while (!stack.isEmpty()) {
-            prev.next = stack.pop();
-            prev = prev.next; // Move our pointer forward
-        }
-
-        // 4. Connect the tail of our newly reversed sublist to the rest of the list
-        prev.next = successor;
-
+        
+        // Phase 3: Reconnect the ends
+        // 'prev' is now the new head of the reversed sublist
+        beforeReverse.next = prev; 
+        
+        // 'curr' is now sitting on the first node AFTER the reversed sublist
+        reverseTail.next = curr;   
+        
         return dummy.next;
     }
 }
