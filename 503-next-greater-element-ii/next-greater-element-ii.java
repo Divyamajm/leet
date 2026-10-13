@@ -7,13 +7,11 @@ class Solution {
             while(!s.isEmpty()&&nums[i%n]>=s.peek()){
                 s.pop();
             }
-            if(i<n){
-                if(s.isEmpty()){
-                    nge[i]=-1;
-                }
-                else{
-                    nge[i]=s.peek();
-                }
+            if(s.isEmpty()){
+                nge[i%n]=-1;
+            }
+            else{
+                nge[i%n]=s.peek();
             }
             s.push(nums[i%n]);
         }
