@@ -6,7 +6,7 @@ class Solution {
         int leftMax=0;
         int rightMax=0;
         int total=0;
-        while(l<=r){
+        while(l<r){
             if(height[l]<height[r]){
                 if(height[l]>leftMax){
                     leftMax=height[l];
