@@ -1,6 +1,6 @@
 class Solution {
     public boolean isSafe(int start,int end,String s){
-        while(start<=end){
+        while(start<end){
             if(s.charAt(start)!=s.charAt(end)){
                 return false;
             }
