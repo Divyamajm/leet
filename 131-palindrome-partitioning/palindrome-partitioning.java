@@ -9,7 +9,7 @@ class Solution {
         }
         return true;
     }
-    public void helper(String s,List<List<String>>result,List<String>current,int ind){
+    public void helper(String s,List<List<String>> result,List<String> current,int ind){
         if(ind==s.length()){
             result.add(new ArrayList<>(current));
             return;
@@ -24,7 +24,7 @@ class Solution {
     }
     public List<List<String>> partition(String s) {
         List<List<String>>result=new ArrayList<>();
-        helper(s,result,new ArrayList<>(),0);
+        helper(s,result,new ArrayList(),0);
         return result;
     }
 }
