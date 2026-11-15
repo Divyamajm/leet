@@ -29,6 +29,10 @@ class Solution {
         return 1+Math.max(l,r);
     }
     public boolean isBalanced(TreeNode root) {
-        return ord(root)!=-1;
+        int x=ord(root);
+        if(x==-1){
+            return false;
+        }
+        return true;
     }
 }
