@@ -14,7 +14,7 @@
  * }
  */
 class Solution {
-    public int max=0;
+    private int max=Integer.MIN_VALUE;
     public int ord(TreeNode root){
         if(root==null){
             return 0;
@@ -25,7 +25,6 @@ class Solution {
         return 1+Math.max(l,r);
     }
     public int diameterOfBinaryTree(TreeNode root) {
-        // max=0;
         ord(root);
         return max;
     }
