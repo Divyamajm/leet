@@ -1,10 +1,10 @@
 class Solution {
     public int reverse(int x) {
-        long total=0;
         long found=1;
+        long total=0;
         if(x<0){
+            x=x*-1;
             found=-1;
-            x=-x*1;
         }
         while(x>0){
             long digit=x%10;
