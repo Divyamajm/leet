@@ -1,16 +1,12 @@
 class Solution {
     public void merge(int[] nums1, int m, int[] nums2, int n) {
-        int[] final1=new int[m+nums2.length];
-        int i;
-        for(i=0;i<m;i++){
-            final1[i]=nums1[i];
+        int[] copy = Arrays.copyOf(nums1, m);
+        int i = 0, j = 0, k = 0;
+
+        while (i < m && j < n) {
+            nums1[k++] = (copy[i] <= nums2[j]) ? copy[i++] : nums2[j++];
         }
-        for(i=m;i<m+nums2.length;i++){
-            final1[i]=nums2[i-m];
-        }
-        Arrays.sort(final1);
-        for(int j=0;j<m+nums2.length;j++){
-            nums1[j]=final1[j];
-        }
+        while (i < m) nums1[k++] = copy[i++];
+        while (j < n) nums1[k++] = nums2[j++];
     }
 }
